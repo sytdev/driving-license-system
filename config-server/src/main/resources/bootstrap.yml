@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: config-server
+  profiles:
+    active:
+      - native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config,classpath:/config/license-service
+server:
+  port: 8071
+
+#Enable all Spring Boot Actuator endpoints.
+#TODO implement the right level of info to be exposed
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
