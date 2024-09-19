@@ -1,0 +1,15 @@
+server:
+  port: 8092
+
+# Mongo Configuration
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mitocode:mitocode@localhost:27017/mitocode?authSource=admin
+
+# Kafka Parameters
+kafka:
+  mitocode:
+    server: 127.0.0.1
+    port: 9092
+    topicName: mitocode

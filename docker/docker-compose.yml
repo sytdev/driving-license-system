@@ -1,15 +1,64 @@
 services:
-  config-server:
-    image: licesys/config-server:0.0.1-SNAPSHOT
+  cmd-database:
+    image: postgres:16.4
     ports:
-       - "8074:8074"
+      - "5532:5432"
     environment:
-      ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
-      SERVER_PORT_1: 8074
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      #POSTGRES_DB:       "licesys_dev"
+    volumes:
+        - ./1-init-postgres.sql:/docker-entrypoint-initdb.d/1-init-postgres.sql
+        - ./2-data-postgres.sql:/docker-entrypoint-initdb.d/2-data-postgres.sql
+        - postgres-data:/var/lib/postgresql/data
     networks:
       backend:
         aliases:
-          - "config-server"
+          - "cmd-database"
+    healthcheck:
+      test: ["CMD", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  query-database:
+    image: mongo:6.0.17
+    ports:
+      - "27117:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - ./1-init-mongo.js:/docker-entrypoint-initdb.d/1-init-mongo.js
+      - mongodb-data:/data/db/
+      - mongodb-log:/var/log/mongodb
+    networks:
+      backend:
+        aliases:
+          - "query-database"
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # config-server:
+  #   image: licesys/config-server:0.0.1-SNAPSHOT
+  #   ports:
+  #      - "8074:8074"
+  #   environment:
+  #     ENCRYPT_KEY: "fje83Ki8403Iod87dne7Yjsl3THueh48jfuO9j4U2hf64Lo"
+  #     SERVER_PORT_1: 8074
+  #   networks:
+  #     backend:
+  #       aliases:
+  #         - "config-server"
+
+# the default driver storage is 'local'
+volumes:
+  postgres-data:
+  mongodb-data:
+  mongodb-log:
 
 networks:
   backend:

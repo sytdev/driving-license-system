@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: license-command-service
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8071
+
+logging:
+  level:
+    org.springframework.web: INFO
+#Enable all Spring Boot Actuator endpoints.
+#TODO implement the right level of info to be exposed (might check Spring Boot in Action book)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
