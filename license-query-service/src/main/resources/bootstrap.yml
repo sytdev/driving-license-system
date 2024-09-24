@@ -7,6 +7,17 @@ spring:
     config:
       uri: http://localhost:8071
 
+server:
+  port: 8081
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /api-docs.yml
+    enabled: false
+
 logging:
   level:
     org.springframework.web: INFO

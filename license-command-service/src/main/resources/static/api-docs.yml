@@ -1,0 +1,282 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /api/v1/command.owners/{idCard}:
+    put:
+      tags:
+      - Owner API
+      operationId: update
+      parameters:
+      - name: idCard
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOwnerCommand"
+        required: true
+      responses:
+        "422":
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+  /api/v1/command.licenses/{licenseNumber}:
+    put:
+      tags:
+      - License API
+      operationId: update_1
+      parameters:
+      - name: licenseNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLicenseCommand"
+        required: true
+      responses:
+        "422":
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/command.owners:
+    post:
+      tags:
+      - Owner API
+      operationId: save
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterOwnerCommand"
+        required: true
+      responses:
+        "422":
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+  /api/v1/command.licenses:
+    post:
+      tags:
+      - License API
+      operationId: save_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IssueLicenseCommand"
+        required: true
+      responses:
+        "422":
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /api/v1/command.licenses/invalidate/{licenseNumber}:
+    post:
+      tags:
+      - License API
+      operationId: invalidate
+      parameters:
+      - name: licenseNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "422":
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        httpCode:
+          type: integer
+          format: int32
+        httpError:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    UpdateOwnerCommand:
+      required:
+      - firstName
+      - lastName
+      type: object
+      properties:
+        firstName:
+          maxLength: 64
+          minLength: 1
+          type: string
+        lastName:
+          maxLength: 64
+          minLength: 1
+          type: string
+        age:
+          type: integer
+          format: int32
+    OwnerInfoCommand:
+      type: object
+      properties:
+        idCard:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+          format: int32
+    UpdateLicenseCommand:
+      type: object
+      properties:
+        owner:
+          $ref: "#/components/schemas/OwnerInfoCommand"
+        expirationPeriod:
+          type: integer
+          format: int32
+    RegisterOwnerCommand:
+      required:
+      - firstName
+      - idCard
+      - lastName
+      type: object
+      properties:
+        idCard:
+          maxLength: 12
+          minLength: 8
+          type: string
+        firstName:
+          maxLength: 64
+          minLength: 1
+          type: string
+        lastName:
+          maxLength: 64
+          minLength: 1
+          type: string
+        age:
+          type: integer
+          format: int32
+    IssueLicenseCommand:
+      required:
+      - ownerIdCard
+      - type
+      type: object
+      properties:
+        ownerIdCard:
+          maxLength: 12
+          minLength: 8
+          type: string
+        type:
+          pattern: A1|A2|A3
+          type: string
+        expirationPeriod:
+          type: integer
+          format: int32

@@ -1,0 +1,140 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8081
+    description: Generated server url
+paths:
+  /api/v1/query.licenses:
+    post:
+      tags:
+        - List licenses
+      operationId: display
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FilterLicensesQuery"
+        required: true
+      responses:
+        "422":
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DisplayLicensesDTO"
+  /api/v1/query.licenses/validate/{licenseNumber}:
+    get:
+      tags:
+        - Show license validity
+      operationId: validate
+      parameters:
+        - name: licenseNumber
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "422":
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DisplayLicenseValidityDTO"
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        httpCode:
+          type: integer
+          format: int32
+        httpError:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    FilterLicensesQuery:
+      type: object
+      properties:
+        status:
+          type: string
+        type:
+          type: string
+        licenseNumber:
+          type: string
+    DisplayLicensesDTO:
+      type: object
+      properties:
+        licenseNumber:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        issuedDate:
+          type: string
+          format: date
+        expirationDate:
+          type: string
+          format: date
+        owner:
+          $ref: "#/components/schemas/DisplayOwnerDTO"
+    DisplayOwnerDTO:
+      type: object
+      properties:
+        idCard:
+          type: string
+        fullName:
+          type: string
+    DisplayLicenseValidityDTO:
+      type: object
+      properties:
+        licenseNumber:
+          type: string
+        expirationDate:
+          type: string
+          format: date
+        ownerIdCard:
+          type: string
