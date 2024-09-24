@@ -40,7 +40,7 @@ public class LicenseServiceImpl implements LicenseService {
 
         return licenses.stream().map(
                 l -> new DisplayLicensesDTO(l.getLicenseNumber(), l.getType(),
-                        l.getStatus(), l.getIssuedDate(), l.getExpirationDate(),
+                        l.getStatus(), l.getIssueDate(), l.getExpirationDate(),
                         new DisplayOwnerDTO(l.getOwner().getIdCard(),
                                 l.getOwner().getFirstName() + " " + l.getOwner().getLastName())
                 )).collect(toList());

@@ -1,15 +1,22 @@
-server:
-  port: 8092
-
-# Mongo Configuration
+app:
+  title: License Microservice - dev
+  
+  # DataSource settings: set here your own configurations for the database
 spring:
   data:
     mongodb:
-      uri: mongodb://mitocode:mitocode@localhost:27017/mitocode?authSource=admin
+      host: localhost
+      port: 27117
+      database: querylicesys_dev
+      username: umongo
+      password: pmongo
+      
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      security:
+        protocol: PLAINTEXT
+      group-id: event-group
+      auto-offset-reset: latest
 
-# Kafka Parameters
-kafka:
-  mitocode:
-    server: 127.0.0.1
-    port: 9092
-    topicName: mitocode
+

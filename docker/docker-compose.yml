@@ -76,6 +76,45 @@ services:
         aliases:
           - "grafana"
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.7.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      backend:
+        aliases:
+          - "zookeeper"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.7.0
+    hostname: kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:  # exposed ports to be accessed by external clients(ex. from local machine)
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      # PLAINTEXT://kafka:19092 -> internal port to be accessed by clients inside the same docker network
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:19092,CONNECTIONS_FROM_HOST://localhost:9092,IP_HOST://192.168.1.37:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT,IP_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    networks:
+      backend:
+        aliases:
+          - "kafka"
+    
+
   # config-server:
   #   image: licesys/config-server:0.0.1-SNAPSHOT
   #   ports:

@@ -2,7 +2,7 @@ package org.licesys.license.exception.handler;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.licesys.common.model.ErrorResponse;
+import org.licesys.common.model.errors.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

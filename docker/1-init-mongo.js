@@ -13,3 +13,5 @@ db.createUser({
 });
 
 db.createCollection("licenses");
+db.createCollection("owners");
+db.createCollection("audits");

@@ -1,8 +1,8 @@
-package org.licesys.license.exception.handler;
+package org.licesys.eventservice.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.licesys.common.model.errors.ErrorResponse;
-import org.licesys.license.exception.ResourceNotFoundException;
+import org.licesys.eventservice.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Document(collection = "owners")
-public class Owner {
+@Document(collection = "audits")
+public class Audit {
 
     @EqualsAndHashCode.Include
     @Getter
@@ -22,33 +22,17 @@ public class Owner {
 
     @Getter @Setter
     @Field
-    private String idCard;
+    private String action;
 
     @Getter @Setter
     @Field
-    private String firstName;
+    private LocalDateTime operationDate;
 
     @Getter @Setter
     @Field
-    private String lastName;
-
-    @Getter @Setter
-    @Field(write = Field.Write.ALWAYS)
-    private Integer age;
+    private String username;
 
     @Getter @Setter
     @Field
-    private String createdBy;
-
-    @Getter @Setter
-    @Field
-    private LocalDateTime createdAt;
-
-    @Getter @Setter
-    @Field(write = Field.Write.ALWAYS)
-    private String modifiedBy;
-
-    @Getter @Setter
-    @Field(write = Field.Write.ALWAYS)
-    private LocalDateTime modifiedAt;
+    private String userFullName;
 }

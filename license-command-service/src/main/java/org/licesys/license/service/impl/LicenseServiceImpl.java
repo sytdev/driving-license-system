@@ -3,18 +3,22 @@ package org.licesys.license.service.impl;
 import org.licesys.common.entities.*;
 import org.licesys.license.command.IssueLicenseCommand;
 import org.licesys.license.command.UpdateLicenseCommand;
+import org.licesys.license.events.AbstractEventHandler;
+import org.licesys.license.events.handler.LicenseEventHandler;
 import org.licesys.license.exception.BusinessRuleException;
 import org.licesys.license.exception.ResourceNotFoundException;
 import org.licesys.license.repository.LicenseRepository;
 import org.licesys.license.repository.OwnerRepository;
 import org.licesys.license.service.LicenseService;
+import org.licesys.license.service.converter.AuditConverter;
 import org.licesys.license.service.converter.LicenseConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Optional;
-import java.util.UUID;
+
+import static org.licesys.common.constants.PartitionTarget.*;
 
 
 @Service
@@ -23,13 +27,22 @@ public class LicenseServiceImpl extends GenericServiceImpl<License, Long> implem
     private final LicenseRepository licenseRepository;
     private final OwnerRepository ownerRepository;
     private final LicenseConverter converter;
+    private final AuditConverter auditConverter;
+    private final AbstractEventHandler auditEventHandler;
+    private final AbstractEventHandler cqrsEventHandler;
+    private final LicenseEventHandler licenseEventHandler;
 
     public LicenseServiceImpl(final LicenseRepository licenseRepository, final OwnerRepository ownerRepository,
-                              final LicenseConverter converter) {
+                              final LicenseConverter converter, AuditConverter auditConverter, @Qualifier("auditEventHandler") final AbstractEventHandler auditEventHandler,
+                              @Qualifier("licenseEventHandler") final AbstractEventHandler cqrsEventHandler, LicenseEventHandler licenseEventHandler) {
         super(licenseRepository);
         this.licenseRepository = licenseRepository;
         this.ownerRepository = ownerRepository;
         this.converter = converter;
+        this.auditConverter = auditConverter;
+        this.auditEventHandler = auditEventHandler;
+        this.cqrsEventHandler = cqrsEventHandler;
+        this.licenseEventHandler = licenseEventHandler;
     }
 
     @Override
@@ -45,7 +58,10 @@ public class LicenseServiceImpl extends GenericServiceImpl<License, Long> implem
             throw new BusinessRuleException("License with the same type and id card already exists");
         }
 
-        licenseRepository.save(converter.toRegisterLicenseEntity(owner, command));
+        license = licenseRepository.save(converter.toRegisterLicenseEntity(owner, command));
+
+        cqrsEventHandler.send(converter.toJson(license), PARTITION_ISSUE_LICENSE);
+        auditEventHandler.send(auditConverter.toJson(license.getAudit(), "A license was issued"), PARTITION_SAVE_AUDIT);
     }
 
     @Override
@@ -54,7 +70,10 @@ public class LicenseServiceImpl extends GenericServiceImpl<License, Long> implem
         License license = licenseRepository.findByLicenseNumber(licenseNumber)
                                 .orElseThrow(() -> new ResourceNotFoundException("License not found"));
 
-        licenseRepository.save(converter.toUpdateLicenseEntity(license, command));
+        license = licenseRepository.save(converter.toUpdateLicenseEntity(license, command));
+
+        cqrsEventHandler.send(converter.toJson(license), PARTITION_UPDATE_LICENSE);
+        auditEventHandler.send(auditConverter.toJson(license.getAudit(), "A License was updated"), PARTITION_SAVE_AUDIT);
     }
 
     @Override
@@ -71,7 +90,13 @@ public class LicenseServiceImpl extends GenericServiceImpl<License, Long> implem
             throw new BusinessRuleException("License is expired and still valid, " +
                     "but must be renewed before " + lastDateToRenew);
         }
-        licenseRepository.invalidate(licenseNumber);
+        //licenseRepository.invalidate(licenseNumber);
+        license.setStatus(Status.NOT_RENEWED);
+        license.getAudit().setModifiedBy("AUTHOR");
+        licenseRepository.save(license);
+
+        cqrsEventHandler.send(converter.toJson(license), PARTITION_INVALIDATE_LICENSE);
+        auditEventHandler.send(auditConverter.toJson(license.getAudit(), "A license was invalidated"), PARTITION_SAVE_AUDIT);
     }
 
 }

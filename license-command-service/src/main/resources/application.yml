@@ -1,0 +1,22 @@
+#spring:
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    producer:
+#      security:
+#        protocol: PLAINTEXT
+#      acks: all
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      properties:
+#        "[enable.idempotence]": true
+#
+#audit-service:
+#  topic:
+#    name: audit-topic
+#
+#event-service:
+#  topic:
+#    name: cqrs-topic
+#
+#
+#

@@ -1,7 +1,7 @@
 package org.licesys.license.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
-import org.licesys.common.model.ErrorResponse;
+import org.licesys.common.model.errors.ErrorResponse;
 import org.licesys.license.exception.BusinessRuleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,0 +1,24 @@
+app:
+  title: License Microservice - default
+
+audit:
+  topic:
+    name: audit-topic
+    partitions:
+      save-adt: 0
+
+license:
+  topic:
+    name: license-topic
+    partitions:
+      issue-lcs: 0
+      update-lcs: 1
+      invalidate-lcs: 2
+
+
+owner:
+  topic:
+    name: owner-topic
+    partitions:
+      register-owr: 0
+      update-owr: 1

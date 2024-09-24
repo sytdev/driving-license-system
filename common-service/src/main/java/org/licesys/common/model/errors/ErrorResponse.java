@@ -1,4 +1,4 @@
-package org.licesys.common.model;
+package org.licesys.common.model.errors;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

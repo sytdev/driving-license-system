@@ -10,6 +10,8 @@ spring:
 logging:
   level:
     org.springframework.web: INFO
+    org.springframework.kafka: DEBUG
+    org.licesys.license: INFO
 #Enable all Spring Boot Actuator endpoints.
 #TODO implement the right level of info to be exposed (might check Spring Boot in Action book)
 management:
@@ -20,7 +22,6 @@ management:
   endpoint:
     health:
       show-details: always
-
   #add label to tag each metric with app's name
   metrics:
     tags:

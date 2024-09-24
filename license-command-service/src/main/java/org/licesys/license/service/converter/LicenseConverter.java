@@ -1,22 +1,29 @@
 package org.licesys.license.service.converter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.licesys.common.entities.*;
 import org.licesys.license.command.IssueLicenseCommand;
 import org.licesys.license.command.UpdateLicenseCommand;
-import org.licesys.license.service.impl.LicenseServiceImpl;
+import org.licesys.common.model.events.LicenseEventModel;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Slf4j
 @Component
 public class LicenseConverter {
 
-    public License toUpdateLicenseEntity(final License license, final UpdateLicenseCommand command) {
+    private final ObjectMapper objectMapper;
 
-//        license.setType(StringUtils.hasText(command.type())
-//                ? LicenseType.valueOf(command.type()) : license.getType());
+    public LicenseConverter(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
+    public License toUpdateLicenseEntity(final License license, final UpdateLicenseCommand command) {
 
         license.setExpirationDate(command.expirationPeriod() != null
                 ? license.getIssueDate().plusMonths(command.expirationPeriod()) : license.getExpirationDate());
@@ -51,5 +58,30 @@ public class LicenseConverter {
 
         return license;
 
+    }
+
+    public String toJson(final License license){
+
+        LicenseEventModel eventModel = new LicenseEventModel();
+        eventModel.setLicenseNumber(license.getLicenseNumber());
+        eventModel.setIssueDate(license.getIssueDate());
+        eventModel.setExpirationDate(license.getExpirationDate());
+        eventModel.setStatus(license.getStatus().toString());
+        eventModel.setType(license.getType().toString());
+        eventModel.setOwnerIdCard(license.getOwner().getIdCard());
+        eventModel.setOwnerFirstName(license.getOwner().getFirstName());
+        eventModel.setOwnerLastName(license.getOwner().getLastName());
+        eventModel.setAge(license.getOwner().getAge());
+        eventModel.setCreatedBy(license.getAudit().getCreatedBy());
+        eventModel.setCreatedAt(license.getAudit().getCreatedAt());
+        eventModel.setModifiedBy(license.getAudit().getLastModifiedBy());
+        eventModel.setModifiedAt(license.getAudit().getLastModifiedAt());
+
+        try{
+            return objectMapper.writeValueAsString(eventModel);
+        }catch (IOException e){
+            log.error("Error while writing to JSON", e);
+            throw new RuntimeException("There is an error while writing to the json output", e);
+        }
     }
 }

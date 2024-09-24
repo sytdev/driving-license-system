@@ -8,9 +8,11 @@ import lombok.Setter;
 import org.licesys.common.entities.LicenseType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -27,12 +29,12 @@ public class License {
     private String licenseNumber;
 
     @Getter @Setter
-    @Field
+    @DocumentReference
     private Owner owner;
 
     @Getter @Setter
     @Field
-    private LocalDate issuedDate;
+    private LocalDate issueDate;
 
     @Getter @Setter
     @Field
@@ -45,4 +47,20 @@ public class License {
     @Getter @Setter
     @Field
     private String status;
+
+    @Getter @Setter
+    @Field
+    private String createdBy;
+
+    @Getter @Setter
+    @Field
+    private LocalDateTime createdAt;
+
+    @Getter @Setter
+    @Field(write = Field.Write.ALWAYS)
+    private String modifiedBy;
+
+    @Getter @Setter
+    @Field(write = Field.Write.ALWAYS)
+    private LocalDateTime modifiedAt;
 }
