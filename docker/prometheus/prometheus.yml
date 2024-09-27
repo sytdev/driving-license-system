@@ -10,6 +10,11 @@ scrape_configs:
       - targets: ['192.168.1.37:8080']
       #- labels:
       #    application: ''
-
+  - job_name: 'license-query-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['192.168.1.37:8081']
+      #- labels:
+      #    application: ''
     
     

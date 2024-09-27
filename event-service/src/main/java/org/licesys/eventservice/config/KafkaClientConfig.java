@@ -29,6 +29,7 @@ public class KafkaClientConfig {
         settings.put(BOOTSTRAP_SERVERS_CONFIG, uri);
         settings.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         settings.put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        settings.put(ALLOW_AUTO_CREATE_TOPICS_CONFIG, false);
 
         return new DefaultKafkaConsumerFactory<String, String>(settings);
     }

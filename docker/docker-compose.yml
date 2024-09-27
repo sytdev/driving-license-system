@@ -89,7 +89,7 @@ services:
       backend:
         aliases:
           - "zookeeper"
-
+  #TODO - CREATE TOPICS AND ITS PARTITIONS FROM HERE.
   kafka:
     image: confluentinc/cp-kafka:7.7.0
     hostname: kafka

@@ -8,11 +8,15 @@ spring:
     config:
       server:
         native:
-          search-locations: classpath:/config/license-service,classpath:/config/event-service
+          search-locations: classpath:/config/license-service,classpath:/config/event-service, 
+                            classpath:/config/discovery-service
 server:
   port: 8071
 
-#Enable all Spring Boot Actuator endpoints.
+#Symmetric encryption(not recommended)
+encrypt:
+  key: $L1c3NS3cr3t#
+
 #TODO implement the right level of info to be exposed
 management:
   endpoints:

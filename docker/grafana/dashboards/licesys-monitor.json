@@ -103,7 +103,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(rate(http_server_requests_seconds_count{job=\"license-command-service\", status=~\"5..\"}[$__rate_interval]))",
+          "expr": "sum(rate(http_server_requests_seconds_count{status=~\"5..\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -131,6 +131,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
+            "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -199,7 +200,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg(rate(http_server_requests_seconds_sum{job=\"license-command-service\", uri!=\"/actuator/prometheus\"}[$__rate_interval])) / avg(rate(http_server_requests_seconds_count{job=\"license-command-service\", uri!=\"/actuator/prometheus\"}[$__rate_interval]))",
+          "expr": "avg(rate(http_server_requests_seconds_sum{uri!=\"/actuator/prometheus\"}[$__rate_interval])) / avg(rate(http_server_requests_seconds_count{uri!=\"/actuator/prometheus\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -264,7 +265,7 @@
       "options": {
         "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -274,6 +275,7 @@
           "values": false
         },
         "showPercentChange": false,
+        "text": {},
         "textMode": "auto",
         "wideLayout": true
       },
@@ -286,7 +288,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "up{job=\"license-command-service\"}",
+          "expr": "up{job=~\"license-.*\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -386,7 +388,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "sum(http_server_requests_seconds_count{application=\"license-command-service\", uri!=\"/actuator/prometheus\"})",
+          "expr": "sum(http_server_requests_seconds_count{uri!=\"/actuator/prometheus\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -415,6 +417,6 @@
   "timezone": "browser",
   "title": "License System",
   "uid": "bdygxtku81xj4b",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }

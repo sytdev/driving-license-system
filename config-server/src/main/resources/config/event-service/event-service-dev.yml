@@ -1,16 +1,15 @@
 app:
   title: License Microservice - dev
   
-  # DataSource settings: set here your own configurations for the database
+# DataSource settings: set here your own configurations for the database
 spring:
   data:
     mongodb:
       host: localhost
       port: 27117
       database: querylicesys_dev
-      username: umongo
-      password: pmongo
-      
+      username: '{cipher}e20c66cd696d060b4cfcad3fbe57d4b05716459baff6fcaad11d039abe12cb23'
+      password: '{cipher}3d78633548624a4ab46b85eaf1516b8e102eb37c6952d285a7f3eb00ef2738a2'
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -18,5 +17,6 @@ spring:
         protocol: PLAINTEXT
       group-id: event-group
       auto-offset-reset: latest
+
 
 
