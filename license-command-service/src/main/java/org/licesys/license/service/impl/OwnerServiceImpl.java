@@ -5,7 +5,9 @@ import org.licesys.common.entities.Owner;
 import org.licesys.license.command.RegisterOwnerCommand;
 import org.licesys.license.command.UpdateOwnerCommand;
 import org.licesys.license.events.AbstractEventHandler;
+import org.licesys.license.exception.BusinessRuleException;
 import org.licesys.license.exception.ResourceNotFoundException;
+import org.licesys.license.filters.utils.UserContextHolder;
 import org.licesys.license.repository.OwnerRepository;
 import org.licesys.license.service.OwnerService;
 import org.licesys.license.service.converter.AuditConverter;
@@ -13,8 +15,11 @@ import org.licesys.license.service.converter.OwnerConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import static org.licesys.common.constants.PartitionTarget.*;
+import java.util.Optional;
 
+import static org.licesys.common.constants.TargetPartition.*;
+
+//TODO validate transactionality
 @Service
 public class OwnerServiceImpl extends GenericServiceImpl<Owner, Long> implements OwnerService {
 
@@ -37,16 +42,22 @@ public class OwnerServiceImpl extends GenericServiceImpl<Owner, Long> implements
     @Override
     public void register(final RegisterOwnerCommand command) {
 
-        Owner owner = new Owner();
-        owner.setIdCard(command.idCard());
-        owner.setFirstName(command.firstName());
-        owner.setLastName(command.lastName());
-        owner.setAge(command.age());
-        owner.setAudit(new Audit("SYSTEM"));
+        Optional<Owner> owner = ownerRepository.findOwnerByIdCard(command.idCard());
 
-        save(owner);
-        ownerEventHandler.send(ownerConverter.toJson(owner), PARTITION_REGISTER_OWNER);
-        auditEventHandler.send(auditConverter.toJson(owner.getAudit(), "An owner was created"), PARTITION_SAVE_AUDIT);
+        if (owner.isPresent()){
+            throw new BusinessRuleException("There's an existing owner with the same id card");
+        }
+
+        Owner newOwner = new Owner();
+        newOwner.setIdCard(command.idCard());
+        newOwner.setFirstName(command.firstName());
+        newOwner.setLastName(command.lastName());
+        newOwner.setAge(command.age());
+        newOwner.setAudit(new Audit(UserContextHolder.getContext().getUsername()));
+
+        save(newOwner);
+        ownerEventHandler.send(ownerConverter.toJson(newOwner), PARTITION_REGISTER_OWNER);
+        auditEventHandler.send(auditConverter.toJson(newOwner.getAudit(), "An owner was created"), PARTITION_SAVE_AUDIT);
     }
 
     @Override
@@ -58,7 +69,7 @@ public class OwnerServiceImpl extends GenericServiceImpl<Owner, Long> implements
         owner.setFirstName(command.firstName());
         owner.setLastName(command.lastName());
         owner.setAge(command.age());
-        owner.getAudit().setModifiedBy("TEST");
+        owner.getAudit().setModifiedBy(UserContextHolder.getContext().getUsername());
         owner = ownerRepository.save(owner);
 
         ownerEventHandler.send(ownerConverter.toJson(owner), PARTITION_UPDATE_OWNER);

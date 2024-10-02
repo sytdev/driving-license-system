@@ -9,7 +9,7 @@ spring:
       server:
         native:
           search-locations: classpath:/config/license-service,classpath:/config/event-service, 
-                            classpath:/config/discovery-service
+                            classpath:/config/discovery-service,classpath:/config/gateway-service
 server:
   port: 8071
 

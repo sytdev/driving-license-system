@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.licesys.common.entities.Audit;
 import org.licesys.common.model.events.AuditEventModel;
+import org.licesys.license.filters.utils.UserContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,8 +24,8 @@ public class AuditConverter{
         AuditEventModel auditEventModel = new AuditEventModel();
         auditEventModel.setAction(action);
         auditEventModel.setOperationDate(LocalDateTime.now());
-        auditEventModel.setUsername("jdoe");
-        auditEventModel.setUserFullName("John Doe");
+        auditEventModel.setUsername(UserContextHolder.getContext().getUsername());
+        auditEventModel.setUserFullName(UserContextHolder.getContext().getFullName());
 
         try {
             return objectMapper.writeValueAsString(auditEventModel);

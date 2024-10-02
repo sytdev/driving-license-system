@@ -7,6 +7,7 @@ import org.licesys.license.events.AbstractEventHandler;
 import org.licesys.license.events.handler.LicenseEventHandler;
 import org.licesys.license.exception.BusinessRuleException;
 import org.licesys.license.exception.ResourceNotFoundException;
+import org.licesys.license.filters.utils.UserContextHolder;
 import org.licesys.license.repository.LicenseRepository;
 import org.licesys.license.repository.OwnerRepository;
 import org.licesys.license.service.LicenseService;
@@ -18,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-import static org.licesys.common.constants.PartitionTarget.*;
+import static org.licesys.common.constants.TargetPartition.*;
 
 
 @Service
@@ -87,12 +88,12 @@ public class LicenseServiceImpl extends GenericServiceImpl<License, Long> implem
         LocalDate lastDateToRenew = license.getExpirationDate().plusDays(30);
 
         if(currentDate.isBefore(lastDateToRenew) || currentDate.isEqual(lastDateToRenew)) {
-            throw new BusinessRuleException("License is expired and still valid, " +
+            throw new BusinessRuleException("License is still valid, " +
                     "but must be renewed before " + lastDateToRenew);
         }
         //licenseRepository.invalidate(licenseNumber);
         license.setStatus(Status.NOT_RENEWED);
-        license.getAudit().setModifiedBy("AUTHOR");
+        license.getAudit().setModifiedBy(UserContextHolder.getContext().getUsername());
         licenseRepository.save(license);
 
         cqrsEventHandler.send(converter.toJson(license), PARTITION_INVALIDATE_LICENSE);

@@ -77,7 +77,7 @@ public class KafkaConfig {
                         .replicas(replicationFactor)
                         .build();
             }else{
-                System.out.println("Topic" + topicName + " already exists");
+                System.out.println("Topic " + topicName + " already exists");
             }
         } catch (InterruptedException | ExecutionException e) {
             System.out.println("[There's an error in KafkaConfig class]");

@@ -1,0 +1,39 @@
+server:
+  port: 8072
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: license-command-service
+          uri: lb://license-command-service
+          predicates:
+            - Path=/license-cmd/**
+          filters:
+            - RewritePath=/license-cmd/(?<path>.*), /$\{path}
+        - id: license-query-service
+          uri: lb://license-query-service
+          predicates:
+            - Path=/license-qry/**
+          filters:
+            - RewritePath=/license-qry/(?<path>.*), /$\{path}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,gateway
+  endpoint:
+    gateway:
+      enabled: true

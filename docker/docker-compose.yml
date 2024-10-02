@@ -113,7 +113,29 @@ services:
       backend:
         aliases:
           - "kafka"
-    
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0
+    command: start-dev --import-realm #dev mode(embedded h2 database-not recomended)
+    environment:
+    - KEYCLOAK_ADMIN=user
+    - KEYCLOAK_ADMIN_PASSWORD=password
+    volumes:
+      - ./licesys-realm-realm.json:/opt/keycloak/data/import/licesys-realm-realm.json
+    ports:
+      - 8180:8080
+    networks:
+      backend:
+        aliases:
+          - "keycloak"
+    #####
+    #realm: licesys-realm
+    #client id: licesys
+    #client credential: kSW2OUxcCYkHbcrjfMhxxs9jS3xhbUFK
+    #user 1: ucreator | pcreator | role: CREATOR | realm role: licesys-creator
+    #user 2: uviewer  | pviewer  | role: VIEWER  | realm role: licesys-viewer
+    #user 3: uremover | premover | role: REMOVER | realm role: licesys-remover
+    #user 4: ueditor  | peditor  | role: EDITOR  | realm role: licesys-editor
 
   # config-server:
   #   image: licesys/config-server:0.0.1-SNAPSHOT

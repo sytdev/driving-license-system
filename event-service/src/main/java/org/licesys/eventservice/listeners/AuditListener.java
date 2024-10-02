@@ -3,7 +3,7 @@ package org.licesys.eventservice.listeners;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.licesys.common.constants.PartitionTarget;
+import org.licesys.common.constants.TargetPartition;
 import org.licesys.common.documents.Audit;
 import org.licesys.common.model.events.AuditEventModel;
 import org.licesys.eventservice.repository.AuditRepository;

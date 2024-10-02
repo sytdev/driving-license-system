@@ -6,6 +6,7 @@ import org.licesys.common.entities.*;
 import org.licesys.license.command.IssueLicenseCommand;
 import org.licesys.license.command.UpdateLicenseCommand;
 import org.licesys.common.model.events.LicenseEventModel;
+import org.licesys.license.filters.utils.UserContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -38,10 +39,10 @@ public class LicenseConverter {
 
         owner.setAge(command.owner().age() != null
                 ? command.owner().age() : license.getOwner().getAge());
-        owner.getAudit().setModifiedBy("TEST4");
+        owner.getAudit().setModifiedBy(UserContextHolder.getContext().getUsername());
         license.setOwner(owner);
 
-        license.getAudit().setModifiedBy("TEST3");
+        license.getAudit().setModifiedBy(UserContextHolder.getContext().getUsername());
         return license;
     }
 
@@ -54,7 +55,7 @@ public class LicenseConverter {
         license.setExpirationDate(LocalDate.now().plusMonths(command.expirationPeriod()));
         license.setStatus(Status.ACTIVE);
         license.setOwner(owner);
-        license.setAudit(new Audit("SYSTEM"));
+        license.setAudit(new Audit(UserContextHolder.getContext().getUsername()));
 
         return license;
 

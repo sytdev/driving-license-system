@@ -1,6 +1,6 @@
 package org.licesys.common.constants;
 
-public class PartitionTarget {
+public class TargetPartition {
 
     public static int PARTITION_ISSUE_LICENSE = 0;
     public static int PARTITION_UPDATE_LICENSE = 1;
