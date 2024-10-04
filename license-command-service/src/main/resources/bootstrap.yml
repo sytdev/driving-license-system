@@ -25,6 +25,12 @@ management:
   endpoint:
     health:
       show-details: always
+  tracing:
+    sampling:
+      probability: 1
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKINSERVER_URI}
   #add label to tag each metric with app's name
   metrics:
     tags:

@@ -34,3 +34,9 @@ management:
   endpoint:
     gateway:
       enabled: true
+  tracing:
+    sampling:
+      probability: 1
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKINSERVER_URI}

@@ -31,6 +31,9 @@ management:
   endpoint:
     health:
       show-details: always
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKINSERVER_URI}
   metrics:
     tags:
       application: ${spring.application.name}

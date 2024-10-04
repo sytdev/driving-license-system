@@ -1,13 +1,14 @@
 services:
-  ########### INFRA CONTAINERS(DATABASE,PROMETHEUS,GRAFANA,ZOOKEEPER,KAFKA,KEYCLOAK) ###########
+  ########### INFRA CONTAINERS(DATABASE,PROMETHEUS,GRAFANA,ZOOKEEPER,KAFKA,KEYCLOAK,ZIPKIN) ###########
   cmd-database:
     image: postgres:16.4
-    ports:
-      - "5532:5432"
+    #ports:
+    #  - 5532:5432
+    expose:
+      - 5432
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      #POSTGRES_DB:       "licesys_dev"
     volumes:
         - ./1-init-postgres.sql:/docker-entrypoint-initdb.d/1-init-postgres.sql
         - ./2-data-postgres.sql:/docker-entrypoint-initdb.d/2-data-postgres.sql
@@ -24,8 +25,10 @@ services:
 
   query-database:
     image: mongo:6.0.17
-    ports:
-      - "27117:27017"
+    #ports:
+    #  - 27117:27017
+    expose:
+      - 27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo
@@ -39,15 +42,17 @@ services:
           - "query-database"
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 5
 
   prometheus:
     image: prom/prometheus:v2.54.0
     container_name: prometheus
-    ports:
-      - "9090:9090"
+#    ports:
+#      - 9090:9090
+    expose:
+      - 9090
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
@@ -64,7 +69,7 @@ services:
     depends_on:
       - prometheus
     ports:
-      - "3000:3000"
+      - 3000:3000
     environment:
       - GF_SECURITY_ADMIN_USER=user
       - GF_SECURITY_ADMIN_PASSWORD=password
@@ -81,8 +86,10 @@ services:
     image: confluentinc/cp-zookeeper:7.7.0
     hostname: zookeeper
     container_name: zookeeper
-    ports:
-      - "2181:2181"
+    #ports:
+    #  - 2181:2181
+    expose:
+      - 2181
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -97,9 +104,11 @@ services:
     container_name: kafka
     depends_on:
       - zookeeper
-    ports:  # exposed ports to be accessed by external clients(ex. from local machine)
-      - 9092:9092
-      - 29092:29092
+    #ports:  #ports to be accessed by external clients(ex. from local machine)
+    #  - 9092:9092
+    #  - 29092:29092
+    expose:
+      - 19092
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -114,6 +123,17 @@ services:
       backend:
         aliases:
           - "kafka"
+
+  zipkin:
+    image: ghcr.io/openzipkin/zipkin-slim
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - 9411:9411
+    networks:
+      backend:
+        aliases:
+          - "zipkin"
 
   keycloak:
     image: quay.io/keycloak/keycloak:19.0
@@ -137,8 +157,10 @@ services:
   ########### APPLICATION CONTAINERS(LICENSE SYSTEM) ###########
   configserver:
     image: licesys/config-server:0.0.1-SNAPSHOT
-    ports:
-       - "8071:8071"
+    #ports:
+    #   - "8071:8071"
+    expose:
+      - 8071
     environment:
       ENCRYPT_KEY: $$L1c3NS3cr3t#
       SERVER_PORT: 8071
@@ -168,8 +190,10 @@ services:
 
   eventservice:
     image: licesys/event-service:0.0.1-SNAPSHOT
-    ports:
-      - "8074:8074"
+    #ports:
+    #  - "8074:8074"
+    expose:
+      - 8074
     environment:
       ENV_PROFILE: "dev"
       CONFIGSERVER_URI: "http://configserver:8071"
@@ -194,8 +218,10 @@ services:
 
   licensecmdservice:
     image: licesys/license-command-service:0.0.1-SNAPSHOT
-    ports:
-      - "8073:8073"
+    #ports:
+    #  - "8073:8073"
+    expose:
+      - 8073
     environment:
       ENV_PROFILE: "dev"
       CONFIGSERVER_URI: "http://configserver:8071"
@@ -203,6 +229,7 @@ services:
       DBSERVER_URI: "cmd-database:5432"
       SERVER_PORT: 8073
       KAFKABOOT_SERVER: "kafka:19092"
+      ZIPKINSERVER_URI: "http://zipkin:9411/api/v2/spans"
     depends_on:
       cmd-database:
         condition: service_healthy
@@ -219,8 +246,10 @@ services:
 
   licensequeryservice:
     image: licesys/license-query-service:0.0.1-SNAPSHOT
-    ports:
-      - "8075:8075"
+    #ports:
+    #  - "8075:8075"
+    expose:
+      - 8075
     environment:
       ENV_PROFILE: "dev"
       CONFIGSERVER_URI: "http://configserver:8071"
@@ -228,6 +257,7 @@ services:
       MONGO_DBSERVER_HOST: "query-database"
       MONGO_DBSERVER_PORT: 27017
       SERVER_PORT: 8075
+      ZIPKINSERVER_URI: "http://zipkin:9411/api/v2/spans"
     depends_on:
       query-database:
         condition: service_healthy
@@ -249,6 +279,7 @@ services:
       CONFIGSERVER_URI: "http://configserver:8071"
       EUREKASERVER_URI: "http://eurekaserver:8070/eureka/"
       KEYCLOAKREALMSERVER_URI: "http://keycloak:8080/realms"
+      ZIPKINSERVER_URI: "http://zipkin:9411/api/v2/spans"
     depends_on:
       keycloak:
         condition: service_started
