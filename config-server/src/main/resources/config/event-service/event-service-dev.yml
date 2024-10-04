@@ -5,13 +5,13 @@ app:
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27117
+      host: ${MONGO_DBSERVER_HOST}
+      port: ${MONGO_DBSERVER_PORT}
       database: querylicesys_dev
       username: '{cipher}e20c66cd696d060b4cfcad3fbe57d4b05716459baff6fcaad11d039abe12cb23'
       password: '{cipher}3d78633548624a4ab46b85eaf1516b8e102eb37c6952d285a7f3eb00ef2738a2'
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKABOOT_SERVER}
     consumer:
       security:
         protocol: PLAINTEXT

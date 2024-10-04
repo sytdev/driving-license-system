@@ -2,13 +2,13 @@ spring:
   application:
     name: license-query-service
   profiles:
-    active: dev
+    active: ${ENV_PROFILE}
   cloud:
     config:
-      uri: http://localhost:8071
+      uri: ${CONFIGSERVER_URI}
 
 server:
-  port: 8081
+  port: ${SERVER_PORT}
 
 springdoc:
   api-docs:

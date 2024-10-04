@@ -31,17 +31,20 @@ public class SecurityConfig {
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
 
         return http.authorizeExchange(auth -> auth
-                        .pathMatchers(HttpMethod.POST,"/api/v1/command.licenses").hasAnyRole("CREATOR")
-                        .pathMatchers(HttpMethod.POST, "/api/v1/command.owners").hasAnyRole("CREATOR")
+                        .pathMatchers(HttpMethod.POST,"/license-cmd/api/v1/command.licenses").hasAnyRole("CREATOR")
+                        .pathMatchers(HttpMethod.POST, "/license-cmd/api/v1/command.owners").hasAnyRole("CREATOR")
 
-                        .pathMatchers(HttpMethod.PUT, "/api/v1/command.licenses/**").hasAnyRole("EDITOR")
-                        .pathMatchers(HttpMethod.PUT, "/api/v1/command.owners/**").hasAnyRole("EDITOR")
+                        .pathMatchers(HttpMethod.PUT, "/license-cmd/api/v1/command.licenses/**").hasAnyRole("EDITOR")
+                        .pathMatchers(HttpMethod.PUT, "/license-cmd/api/v1/command.owners/**").hasAnyRole("EDITOR")
 
-                        .pathMatchers(HttpMethod.POST, "/api/v1/command.licenses/invalidate/**").hasAnyRole("REMOVER")
+                        .pathMatchers(HttpMethod.POST, "/license-cmd/api/v1/command.licenses/invalidate/**").hasAnyRole("REMOVER")
 
-                        .pathMatchers(HttpMethod.GET, "/api/v1/query.licenses/validate/**").hasAnyRole("VIEWER")
-                        .pathMatchers(HttpMethod.POST, "/api/v1/query.licenses/**").hasAnyRole("VIEWER")
+                        .pathMatchers(HttpMethod.GET, "/license-qry/api/v1/query.licenses/validate/**").hasAnyRole("VIEWER")
+                        .pathMatchers(HttpMethod.POST, "/license-qry/api/v1/query.licenses/**").hasAnyRole("VIEWER")
 
+                        //TODO - MANAGE API DOCS BETTER(SECURITY, ACCESS)
+                        .pathMatchers("/license-cmd/api-docs.yml").permitAll()
+                        .pathMatchers("/license-qry/api-docs.yml").permitAll()
                         .anyExchange().authenticated())
                 .csrf(csrfSpec -> csrfSpec.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->

@@ -11,11 +11,11 @@ spring:
           search-locations: classpath:/config/license-service,classpath:/config/event-service, 
                             classpath:/config/discovery-service,classpath:/config/gateway-service
 server:
-  port: 8071
+  port: ${SERVER_PORT}
 
 #Symmetric encryption(not recommended)
 encrypt:
-  key: $L1c3NS3cr3t#
+  key: ${ENCRYPT_KEY}
 
 #TODO implement the right level of info to be exposed
 management:

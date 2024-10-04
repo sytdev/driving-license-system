@@ -1,6 +1,15 @@
 app:
   title: License Microservice - default
 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKASERVER_URI}
+
 audit:
   topic:
     name: audit-topic

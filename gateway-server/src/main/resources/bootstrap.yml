@@ -3,12 +3,17 @@ spring:
     name: gateway-server
   cloud:
     config:
-      uri: http://localhost:8071
-
-
+      uri: ${CONFIGSERVER_URI}
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/licesys-realm
-          jwk-set-uri: http://localhost:8180/realms/licesys-realm/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAKREALMSERVER_URI}/licesys-realm
+          jwk-set-uri: ${KEYCLOAKREALMSERVER_URI}/licesys-realm/protocol/openid-connect/certs
+
+server:
+  port: ${SERVER_PORT}
+
+logging:
+  level:
+    org.springframework.security: INFO

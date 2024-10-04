@@ -2,10 +2,13 @@ spring:
   application:
     name: event-service
   profiles:
-    active: dev
+    active: ${ENV_PROFILE}
   cloud:
     config:
-      uri: http://localhost:8071
+      uri: ${CONFIGSERVER_URI}
+
+server:
+  port: ${SERVER_PORT}
 
 logging:
   level:

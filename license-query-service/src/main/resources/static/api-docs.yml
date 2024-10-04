@@ -3,7 +3,7 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-  - url: http://localhost:8081
+  - url: http://localhost:8075
     description: Generated server url
 paths:
   /api/v1/query.licenses:

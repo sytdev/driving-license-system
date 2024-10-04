@@ -26,6 +26,14 @@ public class TokenFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
+        //TODO whitelist which endpoints don't request for a token
+        //use method shouldNotFilter from OncePerRequestFilter
+        if("/api-docs.yml".equalsIgnoreCase(request.getRequestURI()) ||
+            "/actuator/prometheus".equalsIgnoreCase(request.getRequestURI())) {
+            filterChain.doFilter(request, servletResponse);
+            return;
+        }
+
         String authValue = request.getHeader("Authorization");
         JsonNode jsonObj = decodeJWT(authValue);
         String username = jsonObj.get("preferred_username").asText();
