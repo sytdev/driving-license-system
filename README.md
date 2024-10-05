@@ -69,7 +69,7 @@ En caso de eliminar los contenedores creados ejecutar:
   docker compose down
 ```
 
-## Información adicional
+## Información adicional y opcional
 #### Consola Grafana
 Usuario: user | Password: password
 #### Consola Keycloak (Registrar *127.0.0.1 keycloak* en el archivo hosts del sistema operativo)
