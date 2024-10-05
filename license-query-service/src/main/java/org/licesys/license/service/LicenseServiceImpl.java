@@ -30,6 +30,7 @@ public class LicenseServiceImpl implements LicenseService {
         return new DisplayLicenseValidityDTO(
                 l.getLicenseNumber(),
                 l.getExpirationDate(),
+                l.getStatus(),
                 l.getOwner().getIdCard());
     }
 

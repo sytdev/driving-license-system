@@ -1,10 +1,8 @@
 package org.licesys.license.command;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Range;
 import org.licesys.common.entities.Owner;
 
 import static org.licesys.license.validator.RequestValidator.validate;
@@ -18,6 +16,9 @@ public record IssueLicenseCommand(
         @Pattern(regexp = "A1|A2|A3", message = "Only A1, A2 and A3 are available")
         String type,
 
+        @NotNull
+        @Positive(message = "Expiration period must be positive")
+        @Range(min = 1, max = 3, message = "Expiration period allows 1, 2 or 3 months")
         Integer expirationPeriod) {
 
     public IssueLicenseCommand(String ownerIdCard, String type, Integer expirationPeriod) {
