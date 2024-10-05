@@ -68,3 +68,15 @@ En caso de eliminar los contenedores creados ejecutar:
 ```bash
   docker compose down
 ```
+
+## Información adicional
+#### Consola Grafana
+Usuario: user | Password: password
+#### Consola Keycloak (Registrar *127.0.0.1 keycloak* en el archivo hosts del sistema operativo)
+Usuario: user | Password: password
+#### DB Mongo
+Usuario: mongo | Password: mongo
+#### DB Postgres
+Usuario: postgres | Password: postgres
+
+
