@@ -11,8 +11,8 @@ Diseñada bajo una arquitectura de microservicios con **Spring Cloud**. Además 
 ---
 
 ##  Características principales
-- Gestión de **Licencias**: Emisión, validación y revocación, y mantenimiento.  
-- Gestión de **Propietarios**: creación, actualización, listado, eliminación.  
+- Gestión de **Licencias**: Emisión, validación, revocación y mantenimiento.  
+- Gestión de **Propietarios**: Creación, actualización, listado y eliminación.  
 
 ---
 
