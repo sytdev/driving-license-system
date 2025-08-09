@@ -1,7 +1,7 @@
 # Sistema de Licencias de Manejo
 Aplicación demostrativa y moderna para gestionar el proceso de otorgamiento y revocación de licencias de conducir.
 
-Diseñada bajo una arquitectura de microservicios con **Spring Cloud**. Además de experimentar con tecnologías y conceptos claves como:
+Diseñada bajo una arquitectura de microservicios con **Spring Cloud**. Además de integrar tecnologías y conceptos claves como:
 - Contenerización con **Docker** para un despliegue escalable, y **Docker Compose** para una mejor gestión de servicios.
 - Patron **CQRS** y **Apache Kafka** para desacoplar y optimizar las operaciones de escritura y lectura.
 - Persistencia de datos híbrida con base datos SQL (**Postgres**) y NoSQL (**MongoDB**)
