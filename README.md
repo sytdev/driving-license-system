@@ -1,10 +1,50 @@
 # Sistema de Licencias de Manejo
-Aplicación construida bajo una arquitectura de microservicios con
-el objetivo de emitir, validar, listar, mantener e invalidar licencias de conducir.
+Aplicación demostrativa y moderna para gestionar el proceso de otorgamiento y revocación de licencias de conducir.
 
-Para este sistema se usó Spring Cloud, Docker, Postgres, Mongo DB, Kafka, Prometheus, Grafana, Zipkin y Keycloak.
+Diseñada bajo una arquitectura de microservicios con **Spring Cloud**. Además de experimentar con tecnologías y conceptos claves como:
+- Contenerización con **Docker** para un despliegue escalable, y **Docker Compose** para una mejor gestión de servicios.
+- Patron **CQRS** y **Apache Kafka** para desacoplar y optimizar las operaciones de escritura y lectura.
+- Persistencia de datos híbrida con base datos SQL (**Postgres**) y NoSQL (**MongoDB**)
+- Integración con **Keycloak** como solución de seguridad centralizada para la autenticacion y autorización.
+- Integración con **Prometheus** y **Grafana** para la recopilación de metricas y visualización.
 
-## Requisitos
+---
+
+##  Características principales
+- Gestión de **Licencias**: Emisión, validación y revocación, y mantenimiento.  
+- Gestión de **Propietarios**: creación, actualización, listado, eliminación.  
+
+---
+
+##  Tecnologías utilizadas
+###
+
+<div align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" height="40" alt="java logo" title="Java" />
+  <img width="12" />
+  <img src="https://cdn.worldvectorlogo.com/logos/spring-boot-1.svg" height="40" alt="spring boot logo" title="Spring Boot"/>
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" height="40" alt="mongo logo"  title="Mongo DB"/>
+  <img width="12" />
+  <img src="https://spring.io/img/projects/spring-cloud.svg" height="40" alt="spring cloud logo"  title="Spring Cloud"/>
+  <img width="12" />
+  <img src="https://www.svgrepo.com/show/331370/docker.svg" height="40" alt="docker logo"  title="Docker"/>
+  <img width="12" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png" height="40" alt="docker logo" title="Docker"/>
+  <img width="12" />
+  <img src="https://e7.pngegg.com/pngimages/630/547/png-clipart-kafka-vertical-logo-tech-companies-thumbnail.png" height="40" alt="Kafka logo"  title="Kafka"/>
+  <img width="12" />
+  <img src="https://www.svgrepo.com/show/448228/grafana.svg" height="40" alt="grafana logo"  title="Grafana"/>
+  <img width="12" />
+  <img src="https://icon.icepanel.io/Technology/svg/Prometheus.svg" height="40" alt="prometheus logo"  title="Prometheus"/>
+  <img width="12" />
+  <img src="https://avatars.githubusercontent.com/u/4921466?s=280&v=4" height="40" alt="Keycloak logo"  title="Keycloak"/>
+</div>
+
+###
+---
+
+## Requisitos de despliegue
 - Java 21
 - Maven 3.6.3 
 - Docker 24.0.6
@@ -14,38 +54,32 @@ Para este sistema se usó Spring Cloud, Docker, Postgres, Mongo DB, Kafka, Prome
 
 Para la generación de jars e imagenes ubicarse en la raíz de los siguientes módulos del repositorio clonado:
 
-#### 1.Instalación de jar en el repositorio local de maven
 ```bash
+  ## Instalación local de libreria compartida
   cd .\common-service\
   mvn -DskipTests clean install
-```
-#### 2.Creación de imagen Config Server
-```bash
+
+  ## Creación de imagen Config Server
   cd .\config-server\
   mvn -DskipTests clean package dockerfile:build
-```
-#### 3.Creación de imagen Eureka Server
-```bash
+
+  ## Creación de imagen Eureka Server
   cd .\eureka-server\
   mvn -DskipTests clean package dockerfile:build
-```
-#### 4.Creación de imagen Event Service
-```bash
+
+  ## Creación de imagen Event Service
   cd .\event-service\
   mvn -DskipTests clean package dockerfile:build
-```
-#### 5.Creación de imagen Gateway Server
-```bash
+
+  ## Creación de imagen Gateway Server
   cd .\gateway-server\
   mvn -DskipTests clean package dockerfile:build
-```
-#### 6.Creación de imagenes License Command Service
-```bash
+
+  ## Creación de imagenes License Command Service
   cd .\license-command-service\
   mvn -DskipTests clean package dockerfile:build
-```
-#### 7.Creación de imagenes License Query Service
-```bash
+
+  ## Creación de imagenes License Query Service
   cd .\license-query-service\
   mvn -DskipTests clean package dockerfile:build
 ```
