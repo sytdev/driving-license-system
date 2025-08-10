@@ -6,13 +6,14 @@ Diseñada bajo una arquitectura de microservicios con **Spring Cloud**. Además 
 - Patron **CQRS** y **Apache Kafka** para desacoplar y optimizar las operaciones de escritura y lectura.
 - Persistencia de datos híbrida con base datos SQL (**Postgres**) y NoSQL (**MongoDB**)
 - Integración con **Keycloak** como solución de seguridad centralizada para la autenticacion y autorización.
+- Documentación de endpoints con **OpenAPI**
 - Integración con **Prometheus** y **Grafana** para la recopilación de metricas y visualización.
 
 ---
 
 ##  Características principales
 - Gestión de **Licencias**: Emisión, validación, revocación y mantenimiento.  
-- Gestión de **Propietarios**: Creación, actualización, listado y eliminación.  
+- Gestión de **Propietarios**: Creación, actualización y listado.  
 
 ---
 
@@ -34,11 +35,13 @@ Diseñada bajo una arquitectura de microservicios con **Spring Cloud**. Además 
   <img width="12" />
   <img src="https://e7.pngegg.com/pngimages/630/547/png-clipart-kafka-vertical-logo-tech-companies-thumbnail.png" height="40" alt="Kafka logo"  title="Kafka"/>
   <img width="12" />
+  <img src="https://avatars.githubusercontent.com/u/4921466?s=280&v=4" height="40" alt="Keycloak logo"  title="Keycloak"/>
+  <img width="12" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/OpenAPI_Specification_Logo_Pantone.svg" height="40" alt="openapi logo"  title="Open API"/>
+  <img width="12" />
   <img src="https://www.svgrepo.com/show/448228/grafana.svg" height="40" alt="grafana logo"  title="Grafana"/>
   <img width="12" />
   <img src="https://icon.icepanel.io/Technology/svg/Prometheus.svg" height="40" alt="prometheus logo"  title="Prometheus"/>
-  <img width="12" />
-  <img src="https://avatars.githubusercontent.com/u/4921466?s=280&v=4" height="40" alt="Keycloak logo"  title="Keycloak"/>
 </div>
 
 ###
